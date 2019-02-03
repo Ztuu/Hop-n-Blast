@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     float speed = 5.0f;
     Rigidbody2D rb;
 
+    enum PlayerState {IDLE, RUNNING, JUMPING};
+    PlayerState playerState;
+
     void Start()
     {
         offset = new Vector3(1.0f, 0.0f, 0.0f);
@@ -20,12 +23,17 @@ public class PlayerController : MonoBehaviour
 
         if(horizontalInp != 0.0f)
         {
+            playerState = PlayerState.RUNNING;
             transform.position += offset * horizontalInp * Time.deltaTime * speed;
+        }else
+        {
+            playerState = PlayerState.IDLE;
         }
 
         if (Input.GetButtonDown("Jump"))
         {
-            rb.AddForce(new Vector3(0.0f, 100.0f, 0.0f));
+            playerState = PlayerState.JUMPING;
+            rb.AddForce(new Vector3(0.0f, 20.0f, 0.0f), ForceMode2D.Impulse);
         }
     }
 }
