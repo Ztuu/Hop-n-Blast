@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     float vertProjDistance = 0.8f; //How far below the player the vertical projectile spawns
     Rigidbody2D rb;
     SpriteRenderer spriteRend;
+    AudioSource playerAudio;
 
     enum PlayerDirection {LEFT, RIGHT};
     PlayerDirection playerDirection;
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
         offset = new Vector3(1.0f, 0.0f, 0.0f);
         rb = GetComponent<Rigidbody2D>();
         spriteRend = GetComponent<SpriteRenderer>();
+        playerAudio = GetComponent<AudioSource>();
 
         playerState = PlayerState.IDLE;
         playerDirection = PlayerDirection.RIGHT;
@@ -135,6 +137,7 @@ public class PlayerController : MonoBehaviour
             //TODO: Handle this
         }
 
+        playerAudio.Play();
         StartCoroutine(ShootDelay());
     }
 
@@ -159,6 +162,7 @@ public class PlayerController : MonoBehaviour
             //TODO: Handle this
         }
 
+        playerAudio.Play();
         rb.AddForce(new Vector3(0.0f, 10.0f, 0.0f), ForceMode2D.Impulse); //TODO: Fix double jump
         StartCoroutine(ShootDelay());
     }

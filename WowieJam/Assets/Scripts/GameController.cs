@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour
         }
 
         startMenu.SetActive(true);
+        Cursor.visible = false;
     }
 
     public void StartGame()
