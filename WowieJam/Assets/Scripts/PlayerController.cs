@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float horizontalInp = Input.GetAxisRaw("Horizontal");
+        float vertInp = Input.GetAxisRaw("Vertical");
 
         //TODO: Use 3 raycasts incase player is on edge of platformew|
         RaycastHit2D hit = Physics2D.Raycast(transform.position, -1.0f * transform.up, 0.6f, mask);
@@ -66,9 +67,12 @@ public class PlayerController : MonoBehaviour
                     Shoot();
                     break;
                 case PlayerState.JUMPING:
-                    if (canDoubleJump)
+                    if (canDoubleJump && vertInp < 0.0f)
                     {
                         ShootDown();
+                    }else
+                    {
+                        Shoot();
                     }
                     break;
                 case PlayerState.FIRING:
@@ -94,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING))
         {
-            rb.AddForce(new Vector3(0.0f, 10.0f, 0.0f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector3(0.0f, 15.0f, 0.0f), ForceMode2D.Impulse);
         }
 
     }
@@ -155,13 +159,13 @@ public class PlayerController : MonoBehaviour
             //TODO: Handle this
         }
 
-        rb.AddForce(new Vector3(0.0f, 20.0f, 0.0f), ForceMode2D.Impulse); //TODO: Fix double jump
+        rb.AddForce(new Vector3(0.0f, 10.0f, 0.0f), ForceMode2D.Impulse); //TODO: Fix double jump
         StartCoroutine(ShootDelay());
     }
 
     IEnumerator ShootDelay()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.2f);
         canShoot = true;
     }
 

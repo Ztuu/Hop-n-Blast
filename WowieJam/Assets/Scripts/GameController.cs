@@ -57,4 +57,9 @@ public class GameController : MonoBehaviour
             highScoreText.text = highScore + "";
         }
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
