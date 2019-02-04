@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     Vector3 offset;
     float speed = 7.0f;
-    float projDistance = 0.5f; //How far from the player the projectile spawns
+    float projDistance = 0.5f; //How far from the player the horizontal projectile spawns
+    float vertProjDistance = 0.8f; //How far below the player the vertical projectile spawns
     Rigidbody2D rb;
     SpriteRenderer spriteRend;
 
@@ -14,9 +15,12 @@ public class PlayerController : MonoBehaviour
     PlayerDirection playerDirection;
     enum PlayerState {IDLE, RUNNING, JUMPING, FIRING};
     PlayerState playerState;
+
     bool canShoot;
+    bool canDoubleJump;
 
     public GameObject projectile;
+    public LayerMask mask; //Public so that it can be assigned in the editor
 
 
     void Start()
@@ -34,6 +38,23 @@ public class PlayerController : MonoBehaviour
     {
         float horizontalInp = Input.GetAxisRaw("Horizontal");
 
+        //TODO: Use 3 raycasts incase player is on edge of platformew|
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, -1.0f * transform.up, 0.6f, mask);
+        if(hit)
+        {
+            canDoubleJump = true;
+            if(rb.velocity.x > 0.3f | rb.velocity.x < 0.3f)
+            {
+                playerState = PlayerState.RUNNING;
+            }else
+            {
+                playerState = PlayerState.IDLE;
+            }
+        }else //if the ray doesn't hit anything
+        {
+            playerState = PlayerState.JUMPING;
+        }
+
         if (Input.GetButtonDown("Fire1") && canShoot)
         {
             switch (playerState)
@@ -45,7 +66,10 @@ public class PlayerController : MonoBehaviour
                     Shoot();
                     break;
                 case PlayerState.JUMPING:
-                    ShootDown();
+                    if (canDoubleJump)
+                    {
+                        ShootDown();
+                    }
                     break;
                 case PlayerState.FIRING:
                     break;
@@ -54,7 +78,6 @@ public class PlayerController : MonoBehaviour
 
         if(horizontalInp != 0.0f)
         {
-            playerState = PlayerState.RUNNING;
             transform.position += offset * horizontalInp * Time.deltaTime * speed;
 
             if(horizontalInp > 0.0f && playerDirection != PlayerDirection.RIGHT)
@@ -68,16 +91,12 @@ public class PlayerController : MonoBehaviour
                 spriteRend.flipX = true;
             }
         }
-        else
+
+        if (Input.GetButtonDown("Jump") && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING))
         {
-            playerState = PlayerState.IDLE;
+            rb.AddForce(new Vector3(0.0f, 10.0f, 0.0f), ForceMode2D.Impulse);
         }
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            playerState = PlayerState.JUMPING;
-            rb.AddForce(new Vector3(0.0f, 20.0f, 0.0f), ForceMode2D.Impulse);
-        }
     }
 
     void Shoot()
@@ -112,11 +131,37 @@ public class PlayerController : MonoBehaviour
             //TODO: Handle this
         }
 
-        canShoot = true; 
+        StartCoroutine(ShootDelay());
     }
 
     void ShootDown()
     {
         canShoot = false;
+        canDoubleJump = false;
+
+        Vector3 vertDirection = new Vector3(0.0f, -1.0f, 0.0f);
+        Vector3 startPos = transform.position + vertProjDistance * vertDirection;
+
+        GameObject tempProjRef = Instantiate(projectile, startPos, Quaternion.identity);
+        Projectile tempProjScript = tempProjRef.GetComponent<Projectile>();
+
+        try
+        {
+            tempProjScript.SetDirection(vertDirection);
+        }
+        catch (System.NullReferenceException npe)
+        {
+            Debug.Log(npe.Message.ToString());
+            //TODO: Handle this
+        }
+
+        rb.AddForce(new Vector3(0.0f, 20.0f, 0.0f), ForceMode2D.Impulse); //TODO: Fix double jump
+        StartCoroutine(ShootDelay());
+    }
+
+    IEnumerator ShootDelay()
+    {
+        yield return new WaitForSeconds(0.4f);
+        canShoot = true;
     }
 }

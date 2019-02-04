@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2897166768198864018}
   - component: {fileID: 2897166768198864019}
   - component: {fileID: 2897166768198864108}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ec34b0cbc11f4479400fe053cb52de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectile: {fileID: 7984449366912569082, guid: 94f4ee6267158b64d84486a67b7ab55d,
+    type: 3}
+  mask:
+    serializedVersion: 2
+    m_Bits: 51
 --- !u!212 &2897166768198864018
 SpriteRenderer:
   m_ObjectHideFlags: 0
