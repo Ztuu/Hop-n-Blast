@@ -164,4 +164,9 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         canShoot = true;
     }
+
+    void OnDisable()
+    {
+        GameController.instance.GameOver();
+    }
 }
