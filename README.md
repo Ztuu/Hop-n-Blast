@@ -10,3 +10,5 @@ Submitted for jam at 8am on 4th Feb 2019, I may develop this further in the futu
 The art is a free asset pack made by my friend, get it here: https://cryoscopic-e.itch.io/old-world
 
 This repository contains the entire unity project so you should be able to download it, open it in unity and see how everything works!
+
+![Gameplay gif](WowieJam/Screenshots/gameplaygif.gif)
