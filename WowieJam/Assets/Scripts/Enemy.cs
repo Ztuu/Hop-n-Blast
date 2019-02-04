@@ -34,4 +34,9 @@ public class Enemy : MonoBehaviour
             direction = !direction;
         }
     }
+
+    void OnDisable()
+    {
+        GameController.instance.AddScore(1);
+    }
 }

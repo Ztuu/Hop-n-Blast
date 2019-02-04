@@ -8,7 +8,6 @@ public class Projectile : MonoBehaviour
     float timer = 10.0f;
     Vector3 offset = Vector3.zero;
 
-    // Update is called once per frame
     void Update()
     {
         transform.position += speed * offset * Time.deltaTime;
@@ -27,6 +26,14 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //TODO: What should the projectile do when it hits something
+        if (!other.CompareTag("Player"))
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                Destroy(other.gameObject);
+            }
+
+            Destroy(this.gameObject);
+        }
     }
 }
