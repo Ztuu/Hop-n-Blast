@@ -2,6 +2,8 @@
 ## Created by Ztuu
 This is a litte game I made as an entry to WowieJam hosted by Jonas Tyroller.
 
+This game was a prototype mechanics test for the game I built as my Masters Dissertation which you can [view here](https://github.com/Ztuu/Masters-Project)
+
 ### You can view the submitted game here: https://ztuu.itch.io/hop-n-blast
 
 I basically made most of the project in the final 3 hours so some of the code may be a bit sloppy.
